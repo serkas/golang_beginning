@@ -29,12 +29,12 @@ func main() {
 	fmt.Printf("book1: %v\n", book1)
 
 	book2 := Book{
+		TotalPages: 896,
 		Title:      "Dune",
 		Author:     "Frank Herbert",
 		Year:       1965,
-		TotalPages: 896,
 	}
-
+	//
 	fmt.Printf("book2: %v\n", book2)
 	fmt.Println()
 
@@ -50,9 +50,9 @@ func main() {
 		},
 		InteractivityType: BookInteractivityOnlineQuizes,
 	}
-	fmt.Println(book3.ShortInfo())
+	fmt.Println(book3.Book.ShortInfo())
 
-	fmt.Println(book3.Title) // direct access to embeded fields
+	fmt.Println(book3.Title) // direct access to embedded fields
 	fmt.Println()
 
 	// Polimorfism
@@ -68,6 +68,7 @@ func main() {
 
 	// Pointers
 	var v int8
+	var w int8
 	var p *int8
 	fmt.Printf("v: %v, p: %v\n", v, p)
 
@@ -78,6 +79,10 @@ func main() {
 	*p += 1
 	fmt.Printf("v: %v, p: %v\n", v, p)
 	fmt.Println()
+
+	p = &w
+	*p += 1
+	fmt.Printf("v: %v, w: %v, p: %v\n", v, w, p)
 
 	// Structs with pointers
 	shop := BookShop{
@@ -94,7 +99,7 @@ func main() {
 	printBook(*shop.TopSellingBook)
 	fmt.Println(book3.OrdersCount)
 
-	// Serialization
+	//// Serialization -> see marshaling folder
 }
 
 func printBook(b Book) {
