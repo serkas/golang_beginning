@@ -20,7 +20,9 @@ func main() {
 	// Create a parking with 1 parking spot (a struct field) for a car.
 	// Create a method to print the parking state.
 
-	parking := Parking{}
+	parking := Parking{
+		Spot: &c1,
+	}
 
 	fmt.Printf("%v", parking)
 	parking.PrintState()
