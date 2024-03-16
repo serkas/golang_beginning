@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/crypto/sha3"
+	"log"
+	"time"
 )
 
 func hashes() {
@@ -19,30 +22,30 @@ func hashes() {
 	}
 
 	fmt.Println("--------------------------")
-	//
-	//for _, in := range inputData {
-	//	start := time.Now()
-	//	fmt.Printf("Naive length (took: %v): %s -> %d\n", time.Since(start), in, naiveHashByLength(in))
-	//}
-	//
-	//fmt.Println("--------------------------")
-	//
-	//for _, in := range inputData {
-	//	start := time.Now()
-	//	h := hashSha3(in)
-	//	fmt.Printf("SHA3 (took: %v): %s -> %s\n", time.Since(start), in, h)
-	//}
+
+	for _, in := range inputData {
+		start := time.Now()
+		fmt.Printf("Naive length (took: %v): %s -> %d\n", time.Since(start), in, naiveHashByLength(in))
+	}
+
+	fmt.Println("--------------------------")
+
+	for _, in := range inputData {
+		start := time.Now()
+		h := hashSha3(in)
+		fmt.Printf("SHA3 (took: %v): %s -> %s\n", time.Since(start), in, h)
+	}
 
 	//strong hash (but slow, not suited for hashmaps)
-	//userPassword := "mySecretPassword"
-	//start := time.Now()
-	//
-	//hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userPassword), bcrypt.DefaultCost)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//
-	//fmt.Printf("bcrypt hash from %s calculated in %v: %s", userPassword, time.Since(start), hashedPassword)
+	userPassword := "mySecretPassword"
+	start := time.Now()
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userPassword), 14)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("bcrypt hash from %s calculated in %v: %s", userPassword, time.Since(start), hashedPassword)
 }
 
 func naiveHashByFirstCharHash(in string) string {

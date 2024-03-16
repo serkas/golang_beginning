@@ -27,11 +27,11 @@ func maps() {
 	fmt.Println(planetsRadiusKm)
 
 	// get element from map
-	planet := "Mars"
+	planet := "Mars21"
 	r := planetsRadiusKm[planet] // blind get
 	fmt.Printf("%s radius is %dkm\n", planet, r)
 
-	r, ok := planetsRadiusKm["Saturn"]
+	r, ok := planetsRadiusKm["Saturn1"]
 	fmt.Println(ok, r)
 
 	r, ok = planetsRadiusKm["Moon"]
