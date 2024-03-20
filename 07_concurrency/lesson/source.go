@@ -25,7 +25,5 @@ func (s *EventSource) GenerateEvents(maxInterval time.Duration) {
 		e := Event{ID: i, SourceName: s.name}
 		i++
 		fmt.Printf("%q generate event: %d\n", s.name, e.ID)
-
-		// TODO: implement sending to channel
 	}
 }

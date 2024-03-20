@@ -8,7 +8,13 @@ func main() {
 	mainDoor := NewEventSource("MainDoor")
 	//parkingEntry := NewEventSource("ParkingEntry")
 
-	mainDoor.GenerateEvents(3 * time.Second)
-	//parkingEntry.GenerateEvents(5 * time.Second)
+	//events := make(chan Event)
 
+	mainDoor.GenerateEvents(3 * time.Second)
+	//parkingEntry.GenerateEvents(5*time.Second, events)
+
+	//// Counter
+	//counter := NewCounter()
+	//
+	//counter.Run(events)
 }
