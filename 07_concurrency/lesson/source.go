@@ -14,7 +14,7 @@ func NewEventSource(name string) *EventSource {
 	return &EventSource{name: name}
 }
 
-func (s *EventSource) GenerateEvents(maxInterval time.Duration) {
+func (s *EventSource) GenerateEvents(maxInterval time.Duration, events chan Event) {
 	maxMicroseconds := maxInterval.Microseconds()
 
 	var i int
@@ -25,5 +25,6 @@ func (s *EventSource) GenerateEvents(maxInterval time.Duration) {
 		e := Event{ID: i, SourceName: s.name}
 		i++
 		fmt.Printf("%q generate event: %d\n", s.name, e.ID)
+		events <- e
 	}
 }

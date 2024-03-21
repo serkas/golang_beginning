@@ -6,15 +6,14 @@ func main() {
 	// Count visitors entering a shopping mall
 
 	mainDoor := NewEventSource("MainDoor")
-	//parkingEntry := NewEventSource("ParkingEntry")
+	parkingEntry := NewEventSource("ParkingEntry")
 
-	//events := make(chan Event)
+	events := make(chan Event)
 
-	mainDoor.GenerateEvents(3 * time.Second)
-	//parkingEntry.GenerateEvents(5*time.Second, events)
+	go mainDoor.GenerateEvents(3*time.Second, events)
+	go parkingEntry.GenerateEvents(5*time.Second, events)
 
-	//// Counter
-	//counter := NewCounter()
-	//
-	//counter.Run(events)
+	// Counter
+	counter := NewCounter()
+	counter.Run(events)
 }

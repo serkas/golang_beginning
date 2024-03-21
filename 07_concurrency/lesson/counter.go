@@ -18,21 +18,21 @@ func NewCounter() *Counter {
 }
 
 func (c *Counter) Run(events chan Event) {
-	for e := range events {
-		c.addEvent(e)
-		fmt.Println("got event")
-	}
-
-	//displayTicker := time.NewTicker(10 * time.Second)
-	//for {
-	//	select {
-	//	case e := <-events:
-	//		c.addEvent(e)
-	//	case <-displayTicker.C:
-	//		c.displayStats()
-	//		c.resetInterval()
-	//	}
+	//for e := range events {
+	//	c.addEvent(e)
+	//	fmt.Println("counter stored an event")
 	//}
+
+	displayTicker := time.NewTicker(10 * time.Second)
+	for {
+		select {
+		case e := <-events:
+			c.addEvent(e)
+		case <-displayTicker.C:
+			c.displayStats()
+			c.resetInterval()
+		}
+	}
 }
 
 func (c *Counter) addEvent(e Event) {
