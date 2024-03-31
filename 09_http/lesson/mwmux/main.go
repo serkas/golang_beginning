@@ -10,10 +10,11 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", mainPageHandler)
-	mux.HandleFunc("/login", loginPageHandler)
 
-	mux.HandleFunc("/data", authenticate(userDataHandler))
+	mux.HandleFunc("/", mainPageHandler)
+
+	mux.HandleFunc("/login", loginPageHandler)
+	mux.HandleFunc("/data", authorize(userDataHandler))
 
 	s := &http.Server{
 		Addr:    ":8001",
@@ -27,6 +28,10 @@ func main() {
 
 func mainPageHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, `<h1>Main Page</h1><p>Info</p><p><a href="/login">Login</a></p><p><a href="/data">User Data</a></p>`)
+}
+
+func userDataHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, `secret user data`)
 }
 
 func loginPageHandler(w http.ResponseWriter, r *http.Request) {
@@ -62,8 +67,4 @@ func loginPageHandler(w http.ResponseWriter, r *http.Request) {
 
 	// not authenticated, show login form again
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
-}
-
-func userDataHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, `secret user data`)
 }

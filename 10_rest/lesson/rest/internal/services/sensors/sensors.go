@@ -2,10 +2,10 @@ package sensors
 
 import (
 	"context"
-	"echo-server-demo/internal/entities"
 	"errors"
 	"fmt"
 	"go.uber.org/zap"
+	"rest-server-demo/internal/entities"
 )
 
 type Store interface {

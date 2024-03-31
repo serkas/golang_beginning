@@ -1,8 +1,8 @@
 package api
 
 import (
-	"echo-server-demo/internal/services/sensors"
 	"go.uber.org/zap"
+	"rest-server-demo/internal/services/sensors"
 )
 
 type API struct {

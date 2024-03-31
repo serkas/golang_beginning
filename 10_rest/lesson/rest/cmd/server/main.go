@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"echo-server-demo/internal/app"
 	"go.uber.org/zap"
 	"log"
 	"os"
 	"os/signal"
+	"rest-server-demo/internal/app"
 )
 
 func main() {

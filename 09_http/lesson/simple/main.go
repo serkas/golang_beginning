@@ -11,9 +11,15 @@ const serverPort = 8000
 
 func main() {
 	http.HandleFunc("/", rootHandler)
+
 	http.HandleFunc("/about", aboutHandler)
+
 	http.HandleFunc("/echo", echoHandler)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", serverPort), nil))
+
+	log.Println("Starting server on port", serverPort)
+
+	err := http.ListenAndServe(fmt.Sprintf(":%d", serverPort), nil)
+	log.Fatal(err)
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -36,6 +42,7 @@ func echoHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 	echoData := append([]byte("got: "), reqBody...)
 
 	_, err = w.Write(echoData)

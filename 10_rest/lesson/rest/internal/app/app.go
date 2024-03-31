@@ -2,14 +2,14 @@ package app
 
 import (
 	"context"
-	"echo-server-demo/internal/api"
-	"echo-server-demo/internal/services/sensors"
-	"echo-server-demo/internal/storage"
 	"errors"
 	"fmt"
-	"github.com/labstack/echo/v4"
+	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 	"net/http"
+	"rest-server-demo/internal/api"
+	"rest-server-demo/internal/services/sensors"
+	"rest-server-demo/internal/storage"
 	"time"
 )
 
@@ -30,12 +30,12 @@ func (a *App) Run(ctx context.Context) {
 	sensorsService := sensors.New(a.log, store)
 	handlers := api.New(a.log, sensorsService)
 
-	e := newEchoServer(handlers)
-	addr := fmt.Sprintf(":%d", a.cfg.Port)
+	s := newServer(handlers, a.cfg.Port)
 
 	go func() {
-		a.log.Info("starting echo server", zap.String("addr", addr))
-		err := e.Start(addr)
+		a.log.Info("starting server", zap.Int("port", a.cfg.Port))
+
+		err := s.ListenAndServe()
 		if err != nil && !errors.Is(err, http.ErrServerClosed) {
 			a.log.Fatal("running server", zap.Error(err))
 		}
@@ -46,19 +46,23 @@ func (a *App) Run(ctx context.Context) {
 	<-ctx.Done()
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 	defer cancel()
-	if err := e.Shutdown(shutdownCtx); err != nil {
+	if err := s.Shutdown(shutdownCtx); err != nil {
 		a.log.Fatal("stopping server", zap.Error(err))
 	}
 }
 
-func newEchoServer(apiHandlers *api.API) *echo.Echo {
+func newServer(apiHandlers *api.API, port int) *http.Server {
+	r := mux.NewRouter()
 
-	e := echo.New()
-	e.GET("/", apiHandlers.Hello)
-
-	e.POST("/api/measurements", apiHandlers.Measurements)
+	r.HandleFunc("/", apiHandlers.Hello).Methods(http.MethodGet)
+	r.HandleFunc("/api/measurements", apiHandlers.Measurements).Methods(http.MethodPost)
 
 	// TODO: add sensor CRUD API
 
-	return e
+	s := &http.Server{
+		Addr:    fmt.Sprintf(":%d", port),
+		Handler: r,
+	}
+
+	return s
 }

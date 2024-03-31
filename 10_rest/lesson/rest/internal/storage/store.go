@@ -2,7 +2,7 @@ package storage
 
 import (
 	"context"
-	"echo-server-demo/internal/entities"
+	"rest-server-demo/internal/entities"
 	"sync"
 )
 
