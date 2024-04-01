@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -32,10 +31,10 @@ func (a *App) Run(ctx context.Context) {
 	sensorsService := sensors.New(a.log, store)
 	handlers := api.New(a.log, sensorsService)
 
-	s := newServer(handlers, a.cfg.Port)
+	s := newServer(handlers, a.cfg.Address)
 
 	go func() {
-		a.log.Info("starting server", zap.Int("port", a.cfg.Port))
+		a.log.Info("starting server", zap.String("addr", a.cfg.Address))
 
 		err := s.ListenAndServe()
 		if err != nil && !errors.Is(err, http.ErrServerClosed) {
@@ -51,9 +50,10 @@ func (a *App) Run(ctx context.Context) {
 	if err := s.Shutdown(shutdownCtx); err != nil {
 		a.log.Fatal("stopping server", zap.Error(err))
 	}
+	a.log.Info("stopped gracefully")
 }
 
-func newServer(apiHandlers *api.API, port int) *http.Server {
+func newServer(apiHandlers *api.API, address string) *http.Server {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", apiHandlers.Hello).Methods(http.MethodGet)
@@ -62,7 +62,7 @@ func newServer(apiHandlers *api.API, port int) *http.Server {
 	// TODO: add sensor CRUD API
 
 	s := &http.Server{
-		Addr:    fmt.Sprintf(":%d", port),
+		Addr:    address,
 		Handler: r,
 	}
 

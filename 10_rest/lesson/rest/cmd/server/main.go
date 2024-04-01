@@ -20,7 +20,7 @@ func main() {
 
 	// Config should be populated from flags, config file or (the best option) environment variables
 	cfg := app.Config{
-		Port: 8001,
+		Address: os.Getenv("SERVER_ADDRESS"),
 	}
 
 	a := app.New(logger, cfg)
