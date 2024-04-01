@@ -3,8 +3,10 @@ package api
 import (
 	"encoding/json"
 	"errors"
-	"go.uber.org/zap"
 	"net/http"
+
+	"go.uber.org/zap"
+
 	"rest-server-demo/internal/entities"
 	"rest-server-demo/internal/services/sensors"
 )

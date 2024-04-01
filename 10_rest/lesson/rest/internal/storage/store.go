@@ -2,8 +2,9 @@ package storage
 
 import (
 	"context"
-	"rest-server-demo/internal/entities"
 	"sync"
+
+	"rest-server-demo/internal/entities"
 )
 
 type MemStore struct {
@@ -28,13 +29,4 @@ func (s *MemStore) FindSensorByID(_ context.Context, id int) (*entities.Sensor, 
 	}
 
 	return nil, entities.ErrNotFound
-}
-
-func (s *MemStore) StoreSensorMeasurement(_ context.Context, meas *entities.Measurement) error {
-	s.mx.Lock()
-	defer s.mx.Unlock()
-
-	s.measurements = append(s.measurements, meas)
-
-	return nil
 }

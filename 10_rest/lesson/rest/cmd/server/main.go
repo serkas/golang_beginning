@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
-	"go.uber.org/zap"
 	"log"
 	"os"
 	"os/signal"
+
+	"go.uber.org/zap"
+
 	"rest-server-demo/internal/app"
 )
 

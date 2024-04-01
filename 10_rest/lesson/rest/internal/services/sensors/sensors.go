@@ -4,13 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"go.uber.org/zap"
 	"rest-server-demo/internal/entities"
 )
 
 type Store interface {
 	FindSensorByID(ctx context.Context, id int) (*entities.Sensor, error)
-	StoreSensorMeasurement(ctx context.Context, measurement *entities.Measurement) error
+	CreateSensorMeasurement(ctx context.Context, measurement *entities.Measurement) error
 }
 
 type Service struct {
@@ -36,7 +37,7 @@ func (s *Service) StoreMeasurement(ctx context.Context, measurement *entities.Me
 		return fmt.Errorf("finding sensor: %w", err)
 	}
 
-	err = s.store.StoreSensorMeasurement(ctx, measurement)
+	err = s.store.CreateSensorMeasurement(ctx, measurement)
 	if err != nil {
 		return fmt.Errorf("storing sensor measurement: %w", err)
 	}

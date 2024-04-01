@@ -4,13 +4,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
-	"net/http"
+
 	"rest-server-demo/internal/api"
 	"rest-server-demo/internal/services/sensors"
 	"rest-server-demo/internal/storage"
-	"time"
 )
 
 type App struct {
