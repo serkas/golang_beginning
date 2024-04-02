@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "c17a3505-bdfa-46c9-bc79-6670236dbc40",
+		"name": "10. REST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28888664"
+	},
+	"item": [
+		{
+			"name": "sensors",
+			"item": [
+				{
+					"name": "List sensors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/sensors",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add sensor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 12,\n    \"name\": \"air sensor 12\",\n    \"type\": \"air\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/sensors",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update sensor",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ID\": 10,\n    \"Name\": \"sensor 10 new\",\n    \"Type\": \"air\",\n    \"CreatedAt\": \"2024-04-02T19:33:51.902306+03:00\",\n    \"UpdatedAt\": \"2024-04-02T19:33:51.902306+03:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/sensors/10",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"sensors",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/sensors/12",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"sensors",
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get sensor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/sensors/1",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"sensors",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
