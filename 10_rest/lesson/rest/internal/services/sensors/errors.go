@@ -1,6 +1,6 @@
 package sensors
 
-var ErrSensorNotFound = DataError("sensor_not_found")
+var ErrEntityNotFound = DataError("entity_not_found")
 
 type DataError string
 

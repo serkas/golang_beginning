@@ -1,7 +1,7 @@
 package entities
 
 type Measurement struct {
-	SensorID   int                   `json:"sensor_id"`
+	SensorID   int64                 `json:"sensor_id"`
 	Timestamp  uint64                `json:"timestamp"`
 	Parameters MeasurementParameters `json:"parameters"`
 }

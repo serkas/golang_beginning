@@ -1,8 +1,8 @@
 package storage
 
 import (
-	"context"
 	"sync"
+	"time"
 
 	"rest-server-demo/internal/entities"
 )
@@ -15,18 +15,15 @@ type MemStore struct {
 }
 
 func NewMemStorage() *MemStore {
-	return &MemStore{}
-}
-
-func (s *MemStore) FindSensorByID(_ context.Context, id int) (*entities.Sensor, error) {
-	s.mx.Lock()
-	defer s.mx.Unlock()
-
-	for _, sensor := range s.sensors {
-		if sensor.ID == id {
-			return sensor, nil
-		}
+	return &MemStore{
+		sensors: []*entities.Sensor{
+			{
+				ID:        10,
+				Name:      "sensor 10",
+				Type:      "air",
+				CreatedAt: time.Now(),
+				UpdatedAt: time.Now(),
+			},
+		},
 	}
-
-	return nil, entities.ErrNotFound
 }

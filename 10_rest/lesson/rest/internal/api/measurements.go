@@ -11,7 +11,7 @@ import (
 	"rest-server-demo/internal/services/sensors"
 )
 
-func (a *API) Measurements(w http.ResponseWriter, r *http.Request) {
+func (a *API) CreateMeasurement(w http.ResponseWriter, r *http.Request) {
 	a.log.Info("got measurement")
 
 	var meas entities.Measurement

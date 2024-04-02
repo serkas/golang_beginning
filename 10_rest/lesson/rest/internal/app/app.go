@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 
 	"rest-server-demo/internal/api"
@@ -28,10 +27,12 @@ func New(logger *zap.Logger, cfg Config) *App {
 
 func (a *App) Run(ctx context.Context) {
 	store := storage.NewMemStorage()
-	sensorsService := sensors.New(a.log, store)
-	handlers := api.New(a.log, sensorsService)
 
-	s := newServer(handlers, a.cfg.Address)
+	sensorsService := sensors.New(a.log, store)
+
+	router := api.New(a.log, sensorsService).CreateRouter()
+
+	s := newServer(router, a.cfg.Address)
 
 	go func() {
 		a.log.Info("starting server", zap.String("addr", a.cfg.Address))
@@ -53,17 +54,10 @@ func (a *App) Run(ctx context.Context) {
 	a.log.Info("stopped gracefully")
 }
 
-func newServer(apiHandlers *api.API, address string) *http.Server {
-	r := mux.NewRouter()
-
-	r.HandleFunc("/", apiHandlers.Hello).Methods(http.MethodGet)
-	r.HandleFunc("/api/measurements", apiHandlers.Measurements).Methods(http.MethodPost)
-
-	// TODO: add sensor CRUD API
-
+func newServer(handler http.Handler, address string) *http.Server {
 	s := &http.Server{
 		Addr:    address,
-		Handler: r,
+		Handler: handler,
 	}
 
 	return s

@@ -28,7 +28,21 @@ func (s *MemStore) CreateSensor(_ context.Context, sensor *entities.Sensor) erro
 	return nil
 }
 
-func (s *MemStore) GetSensor(_ context.Context, id int) (*entities.Sensor, error) {
+func (s *MemStore) UpdateSensor(_ context.Context, sensor *entities.Sensor) error {
+	s.mx.Lock()
+	defer s.mx.Unlock()
+
+	for i, e := range s.sensors {
+		if e.ID == sensor.ID {
+			s.sensors[i] = sensor
+			return nil
+		}
+	}
+
+	return entities.ErrNotFound
+}
+
+func (s *MemStore) GetSensor(_ context.Context, id int64) (*entities.Sensor, error) {
 	s.mx.Lock()
 	defer s.mx.Unlock()
 
@@ -41,7 +55,7 @@ func (s *MemStore) GetSensor(_ context.Context, id int) (*entities.Sensor, error
 	return nil, entities.ErrNotFound
 }
 
-func (s *MemStore) DeleteSensor(_ context.Context, id int) error {
+func (s *MemStore) DeleteSensor(_ context.Context, id int64) error {
 	s.mx.Lock()
 	defer s.mx.Unlock()
 
