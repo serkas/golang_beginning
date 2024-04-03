@@ -1,0 +1,20 @@
+
+syntax = "proto3";
+
+option go_package = "grpc-demo/gen/calc";
+
+package calc;
+
+// The Calculator service definition.
+service Calculator {
+  rpc Multiply (MultiplyRequest) returns (MultiplyResponse) {}
+}
+
+message MultiplyRequest {
+  double argument_a = 1;
+  double argument_b = 2;
+}
+
+message MultiplyResponse {
+  double result = 1;
+}
