@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"regexp"
 )
@@ -27,26 +28,26 @@ func main() {
 		fmt.Printf("%q %t\n", e, isValid)
 	}
 
-	////For dynamic expressions
-	////go run . -pattern '\d{3}\s\w+'
-	//pattern := flag.String("pattern", "", "specify pattern to search for")
-	//flag.Parse()
-	//if *pattern == "" {
-	//	flag.Usage()
-	//	return
-	//}
-	//
-	//re, err := regexp.Compile(*pattern)
-	//if err != nil {
-	//	fmt.Printf("compiling pattern: %s", err)
-	//	return
-	//}
-	//
-	//text := `some text example 123 abc`
-	//if re.MatchString(text) {
-	//	fmt.Printf("%q MATCHED %q\n", *pattern, text)
-	//} else {
-	//	fmt.Printf("%q NOT MATCHED %q\n", *pattern, text)
-	//}
+	//For dynamic expressions
+	//go run . -pattern '\d{3}\s\w+'
+	pattern := flag.String("pattern", "", "specify pattern to search for")
+	flag.Parse()
+	if *pattern == "" {
+		flag.Usage()
+		return
+	}
+
+	re, err := regexp.Compile(*pattern)
+	if err != nil {
+		fmt.Printf("compiling pattern: %s", err)
+		return
+	}
+
+	text := `some text example 123 abc`
+	if re.MatchString(text) {
+		fmt.Printf("%q MATCHED %q\n", *pattern, text)
+	} else {
+		fmt.Printf("%q NOT MATCHED %q\n", *pattern, text)
+	}
 
 }

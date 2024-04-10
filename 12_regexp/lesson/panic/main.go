@@ -3,7 +3,6 @@ package main
 import "fmt"
 
 func main() {
-
 	a()
 
 	fmt.Println("main finished")
@@ -11,12 +10,14 @@ func main() {
 
 func a() {
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Printf("recovered from \"%v\"\n", r)
-		}
+		//if r := recover(); r != nil {
+		//	fmt.Printf("recovered from \"%v\"\n", r)
+		//}
 	}()
 
 	//panic("panic in a")
+
+	b()
 }
 
 func b() {
@@ -32,4 +33,6 @@ func c() {
 	fmt.Println("some code in c")
 
 	panic("panic in c")
+
+	fmt.Println("some code in c 2")
 }
