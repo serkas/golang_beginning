@@ -1,9 +1,8 @@
 package phone
 
 import (
-	"testing"
-
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestFindAllSingle(t *testing.T) {
@@ -13,7 +12,7 @@ func TestFindAllSingle(t *testing.T) {
 	result := FindAll(input)
 
 	if len(result) != len(expected) {
-		t.Errorf("in: %s, expected: %s, got: %s", input, expected, result)
+		t.Fatalf("in: %s, expected: %s, got: %s", input, expected, result)
 	}
 	if result[0] != expected[0] {
 		t.Errorf("in: %s, expected: %s, got: %s", input, expected, result)
@@ -22,21 +21,24 @@ func TestFindAllSingle(t *testing.T) {
 
 func TestFindAllTable(t *testing.T) {
 	cases := []struct {
+		name     string
 		in       string
 		expected []string
 	}{
 		{
+			name:     "a",
 			in:       "number: +1(123)4567890",
 			expected: []string{"+1(123)4567890"},
 		},
 		{
+			name:     "b",
 			in:       "number: 123-456-7890 fdfsd",
 			expected: []string{"123-456-7890"},
 		},
 	}
 
 	for _, c := range cases {
-		t.Run(c.in, func(t *testing.T) {
+		t.Run(c.name, func(t *testing.T) {
 			result := FindAll(c.in)
 
 			if len(result) != len(c.expected) {
@@ -80,6 +82,7 @@ func TestFindAllTableAssert(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.in, func(t *testing.T) {
 			result := FindAll(c.in)
+
 			assert.Equal(t, c.expected, result)
 		})
 	}

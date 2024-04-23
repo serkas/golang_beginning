@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	"proj/lessons/16_testing/lesson/functional/app"
@@ -12,7 +13,7 @@ import (
 func main() {
 	a := app.New(storage.NewMemStorage())
 
-	err := a.Run(":8081")
+	err := a.Run(context.Background(), ":8081")
 	if err != nil {
 		log.Fatal(err)
 	}

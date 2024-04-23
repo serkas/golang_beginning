@@ -20,7 +20,7 @@ type App struct {
 	server *http.Server
 }
 
-func New(items ItemsService, serverAddress string) *App {
+func New(items ItemsService) *App {
 	app := &App{
 		items: items,
 	}
@@ -30,14 +30,14 @@ func New(items ItemsService, serverAddress string) *App {
 	handler.HandleFunc("POST /items", app.addItem)
 
 	app.server = &http.Server{
-		Addr:    serverAddress,
 		Handler: handler,
 	}
 
 	return app
 }
 
-func (a *App) Run(_ context.Context) error {
+func (a *App) Run(_ context.Context, serverAddress string) error {
+	a.server.Addr = serverAddress
 	err := a.server.ListenAndServe()
 	if err != nil && !errors.Is(err, http.ErrServerClosed) {
 		return err

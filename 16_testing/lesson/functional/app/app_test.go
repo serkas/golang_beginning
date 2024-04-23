@@ -20,7 +20,7 @@ import (
 func TestAPIHandlerAddItem(t *testing.T) {
 	// common setup - Usually moved out to a helper function
 	store := storage.NewMemStorage()
-	app := New(store, ":8080")
+	app := New(store)
 
 	// test-case setup
 	item := &model.Item{

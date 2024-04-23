@@ -17,11 +17,11 @@ import (
 func TestAddItem(t *testing.T) {
 	// common setup - Usually moved out to a helper function
 	store := storage.NewMemStorage() // can be a real DB client if DB is run locally or in Docker
-	a := app.New(store, ":8888")
+	a := app.New(store)
 
 	defer a.Shutdown()
 	go func() {
-		err := a.Run(context.Background())
+		err := a.Run(context.Background(), ":8888")
 		if err != nil {
 			t.Logf("running server: %s", err)
 		}
@@ -54,11 +54,11 @@ func TestAddItem(t *testing.T) {
 func TestListItems(t *testing.T) {
 	// common setup - Usually moved out to a helper function
 	store := storage.NewMemStorage() // can be a real DB client if DB is run locally or in Docker
-	a := app.New(store, ":8888")
+	a := app.New(store)
 
 	defer a.Shutdown()
 	go func() {
-		err := a.Run(context.Background())
+		err := a.Run(context.Background(), ":8888")
 		if err != nil {
 			t.Logf("running server: %s", err)
 		}
@@ -74,8 +74,8 @@ func TestListItems(t *testing.T) {
 	require.NoError(t, err)
 
 	// execution
-	cli := http.DefaultClient
-	resp, err := cli.Do(req)
+	httpCli := http.DefaultClient
+	resp, err := httpCli.Do(req)
 	require.NoError(t, err)
 
 	// validation
