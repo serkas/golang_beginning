@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"proj/lessons/18_databases/lesson/service/app"
 	"proj/lessons/18_databases/lesson/service/model"
+	"proj/lessons/18_databases/lesson/service/storage"
 	"testing"
 	"time"
 )
@@ -35,10 +36,11 @@ func setup(t *testing.T) (cleanUp func(...string), db *sql.DB) {
 		}
 	}()
 
+	// waiting until the server is up
 	assert.Eventually(t, func() bool {
 		_, err := http.Get("http://localhost:8888")
 		return err == nil
-	}, time.Second, 20*time.Millisecond)
+	}, time.Second, 10*time.Millisecond)
 
 	// DB client:
 	// * to prepare fixtures
@@ -54,7 +56,7 @@ func setup(t *testing.T) (cleanUp func(...string), db *sql.DB) {
 		cancelSrv()
 
 		for _, table := range dbTables {
-			_, err := sqlDB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", table))
+			_, err := sqlDB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", table)) // DO NOT USE string formatting in app code. TRUNCATE does not support SQL arguments, so we use string operations
 			if err != nil {
 				t.Errorf("cleaning table %s: %s", table, err)
 			}
@@ -67,7 +69,7 @@ func setup(t *testing.T) (cleanUp func(...string), db *sql.DB) {
 }
 
 func TestAddItem(t *testing.T) {
-	cleanUp, _ := setup(t)
+	cleanUp, db := setup(t)
 	defer cleanUp("items")
 
 	// test-case setup
@@ -88,10 +90,12 @@ func TestAddItem(t *testing.T) {
 
 	// validation
 	require.Equal(t, http.StatusCreated, resp.StatusCode)
-	//storedItems, err := store.ListItems(context.Background())
-	//require.NoError(t, err)
-	//require.Len(t, storedItems, 1)
-	//assert.Equal(t, item, storedItems[0])
+
+	store := storage.New(db)
+	storedItems, err := store.ListItems(context.Background())
+	require.NoError(t, err)
+	require.Len(t, storedItems, 1)
+	assert.Equal(t, item.Name, storedItems[0].Name)
 }
 
 func TestListItems(t *testing.T) {

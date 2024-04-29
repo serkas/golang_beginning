@@ -1,6 +1,12 @@
 package model
 
+import "github.com/uptrace/bun"
+
+// https://bun.uptrace.dev/guide/models.html#mapping-tables-to-structs
+
 type Item struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	bun.BaseModel `bun:"table:items,alias:u" json:"-"`
+
+	ID   int    `bun:"id,pk,autoincrement" json:"id"`
+	Name string `bun:"name" json:"name"`
 }

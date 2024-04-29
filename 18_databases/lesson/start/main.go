@@ -1,45 +1,50 @@
 package main
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/mysqldialect"
 	"log"
+	"os"
 )
 
 func main() {
-	//demoStandardLib()
-	//os.Exit(0)
+	demoStandardLib()
+	os.Exit(0)
 
-	// Open a MySQL database.
-	sqldb, err := sql.Open("mysql", "root:root@tcp(localhost:13306)/start")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Create a Bun db on top of it.
-	db := bun.NewDB(sqldb, mysqldialect.New())
-
-	// Select one
-	var item Item
-	err = db.NewSelect().Model(&item).Where("id = ?", 2).Scan(context.Background())
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(item)
-
-	// Insert
-	newItem := Item{
-		Name: "New Item",
-	}
-	_, err = db.NewInsert().Model(&newItem).Exec(context.Background())
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	//// Open a MySQL database.
+	//sqldb, err := sqlx.Open("mysql", "root:root@tcp(localhost:13306)/start")
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	////sqldb.MustExec(`
+	////	CREATE TABLE items2 (
+	////	id   BIGINT NOT NULL AUTO_INCREMENT,
+	////	name varchar(250) NOT NULL,
+	////	PRIMARY KEY (id));
+	////`)
+	//
+	//// Insert
+	//newItem := Item{
+	//	Name: "New Item 4",
+	//}
+	//
+	//_, err = sqldb.NamedExec("INSERT INTO items (name) VALUES (:name)", &newItem)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//// Select one
+	//items := []*Item{}
+	//err = sqldb.Select(&items, "SELECT * FROM items ORDER BY id ASC")
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//for _, item := range items {
+	//	fmt.Println(item)
+	//}
 }
 
 func demoStandardLib() {

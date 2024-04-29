@@ -1,0 +1,14 @@
+services:
+  db:
+    image: mysql:8.3
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_DATABASE: your_db_name
+      MYSQL_ROOT_PASSWORD: root
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+
