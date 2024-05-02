@@ -46,7 +46,7 @@ func (a *App) Run(ctx context.Context) error {
 
 	defer redisCli.Close()
 
-	itemsService := items.New(store, cache.New(redisCli))
+	itemsService := items.New(store, cache.New(redisCli), items.NewViewsTracker(redisCli))
 	server := api.NewServer(a.conf.ServerAddress, itemsService)
 
 	go func() {

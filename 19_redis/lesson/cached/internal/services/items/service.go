@@ -15,7 +15,7 @@ type Store interface {
 	GetItem(ctx context.Context, id int) (*model.Item, error)
 	AddItem(ctx context.Context, item *model.Item) error
 
-	GetTopViewedItems(ctx context.Context, limit int) ([]*model.Item, error)
+	GetTopLikedItems(ctx context.Context, limit int) ([]*model.Item, error)
 }
 
 type Cache interface {
@@ -24,14 +24,16 @@ type Cache interface {
 }
 
 type Service struct {
-	store Store
-	cache Cache
+	store        Store
+	cache        Cache
+	viewsTracker *ViewsTracker
 }
 
-func New(store Store, cache Cache) *Service {
+func New(store Store, cache Cache, viewsTracker *ViewsTracker) *Service {
 	return &Service{
-		store: store,
-		cache: cache,
+		store:        store,
+		cache:        cache,
+		viewsTracker: viewsTracker,
 	}
 }
 
@@ -47,22 +49,44 @@ func (s *Service) Add(ctx context.Context, item *model.Item) error {
 	return s.store.AddItem(ctx, item)
 }
 
-func (s *Service) GetTopViewed(ctx context.Context, numTopItems int) (result []*model.Item, err error) {
-	items, err := s.cache.GetItems(ctx, "top_viewed_items")
+func (s *Service) GetTopLiked(ctx context.Context, numTopItems int) (result []*model.Item, err error) {
+	cacheKey := "top_liked_items"
+	items, err := s.cache.GetItems(ctx, cacheKey)
 	if err != nil && !errors.Is(err, cache.ErrNotFound) {
-		return nil, fmt.Errorf("getting top viewed items from cahce: %w", err)
+		return nil, fmt.Errorf("getting top liked items from cahce: %w", err)
 	}
 
 	if errors.Is(err, cache.ErrNotFound) {
-		items, err = s.store.GetTopViewedItems(ctx, numTopItems)
+		items, err = s.store.GetTopLikedItems(ctx, numTopItems)
 		if err != nil {
-			return nil, fmt.Errorf("getting top viewed items: %w", err)
+			return nil, fmt.Errorf("getting top liked items: %w", err)
 		}
 
-		err = s.cache.SetItems(ctx, "top_viewed_items", items, time.Minute)
+		err = s.cache.SetItems(ctx, cacheKey, items, time.Minute)
 		if err != nil {
-			log.Printf("setting top viewed items: %s", err)
+			log.Printf("caching top liked items: %s", err)
 		}
+	}
+
+	return items, nil
+}
+
+func (s *Service) CountView(ctx context.Context, itemID int) error {
+	return s.viewsTracker.View(ctx, itemID)
+}
+
+func (s *Service) GetTopViewed(ctx context.Context, num int) (items []*model.Item, err error) {
+	ids, err := s.viewsTracker.GetTopViewed(ctx, num)
+	if err != nil {
+		return nil, fmt.Errorf("getting top viewed item ids: %w", err)
+	}
+
+	for _, id := range ids {
+		item, err := s.store.GetItem(ctx, id)
+		if err != nil {
+			return nil, fmt.Errorf("getting item by id: %w", err)
+		}
+		items = append(items, item)
 	}
 
 	return items, nil

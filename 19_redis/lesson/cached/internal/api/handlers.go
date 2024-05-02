@@ -6,9 +6,10 @@ import (
 	"log"
 	"net/http"
 	"proj/lessons/19_redis/lesson/cached/internal/model"
+	"strconv"
 )
 
-func (s *Server) getItems(w http.ResponseWriter, r *http.Request) {
+func (s *Server) listItems(w http.ResponseWriter, r *http.Request) {
 	items, err := s.items.List(r.Context())
 	if err != nil {
 		log.Printf("getting items: %s", err)
@@ -41,6 +42,43 @@ func (s *Server) addItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+func (s *Server) getItem(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	item, err := s.items.Get(r.Context(), int(id))
+	if err != nil {
+		log.Printf("getting items: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = s.items.CountView(r.Context(), item.ID)
+	if err != nil {
+		log.Printf("erroro counting view: %s", err)
+	}
+
+	writeResponse(w, item)
+}
+
+func (s *Server) getTopLikedItems(w http.ResponseWriter, r *http.Request) {
+	numTopItems := 10
+	items, err := s.items.GetTopLiked(r.Context(), numTopItems)
+	if err != nil {
+		handleError(w, fmt.Errorf("getting top liked items: %w", err))
+		return
+	}
+
+	if items == nil {
+		items = []*model.Item{}
+	}
+
+	writeResponse(w, items)
 }
 
 func (s *Server) getTopViewedItems(w http.ResponseWriter, r *http.Request) {

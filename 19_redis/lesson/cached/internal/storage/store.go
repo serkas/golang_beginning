@@ -30,9 +30,10 @@ func (s *Store) ListItems(ctx context.Context) (result []*model.Item, err error)
 	return result, nil
 }
 
-func (s *Store) GetItem(ctx context.Context, id int) (item *model.Item, err error) {
-	err = s.db.NewSelect().Model(&item).Where("id = ?", id).Scan(ctx)
-	return item, err
+func (s *Store) GetItem(ctx context.Context, id int) (*model.Item, error) {
+	var item model.Item
+	err := s.db.NewSelect().Model(&item).Where("id = ?", id).Scan(ctx)
+	return &item, err
 }
 
 func (s *Store) AddItem(ctx context.Context, item *model.Item) error {
@@ -41,12 +42,12 @@ func (s *Store) AddItem(ctx context.Context, item *model.Item) error {
 	return err
 }
 
-func (s *Store) GetTopViewedItems(ctx context.Context, limit int) (result []*model.Item, err error) {
+func (s *Store) GetTopLikedItems(ctx context.Context, limit int) (result []*model.Item, err error) {
 	defer func(start time.Time) {
-		log.Printf("got top viewed from DB in %v", time.Since(start))
+		log.Printf("got top liked from DB in %v", time.Since(start))
 	}(time.Now())
 
-	err = s.db.NewSelect().Model(&result).Order("views DESC").Limit(limit).Scan(ctx)
+	err = s.db.NewSelect().Model(&result).Order("likes DESC").Limit(limit).Scan(ctx)
 	if err != nil {
 		return nil, err
 	}

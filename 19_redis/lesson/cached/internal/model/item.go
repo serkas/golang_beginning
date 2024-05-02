@@ -9,5 +9,5 @@ type Item struct {
 
 	ID    int    `bun:"id,pk,autoincrement" json:"id"`
 	Name  string `bun:"name" json:"name"`
-	Views int    `bun:"views" json:"views"`
+	Likes int    `bun:"likes" json:"likes"`
 }
