@@ -1,0 +1,10 @@
+version: '3'
+services:
+  redis:
+    image: redis:7.2
+    container_name: practice_redis
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "6379:6379"
+
