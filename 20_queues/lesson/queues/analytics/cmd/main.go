@@ -59,6 +59,7 @@ func main() {
 	}
 	var forever chan struct{}
 
+	authorLikes := make(map[int]int)
 	go func() {
 		for d := range msgs {
 			var event ArticleLikeEvent
@@ -67,7 +68,8 @@ func main() {
 				log.Fatal(err)
 			}
 
-			log.Printf("got ArticleLikeEvent: %v", event)
+			authorLikes[event.AuthorID] += 1
+			log.Printf("got ArticleLikeEvent. Author %d has %d likes", event.AuthorID, authorLikes[event.AuthorID])
 		}
 	}()
 
