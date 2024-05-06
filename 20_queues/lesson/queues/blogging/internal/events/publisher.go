@@ -47,6 +47,7 @@ func NewPublisher(amqpURL string) (*Publisher, error) {
 }
 
 func (p *Publisher) Close() {
+	// It's important to call close on channel to ensure in-flight messages are completely delivered to server
 	p.channel.Close()
 	p.connection.Close()
 }
