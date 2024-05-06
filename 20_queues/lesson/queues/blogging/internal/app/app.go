@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"log"
+	"math/rand"
 	"proj/lessons/20_queues/lesson/queues/blogging/internal/events"
 	"proj/lessons/20_queues/lesson/queues/blogging/internal/models"
 	"proj/lessons/20_queues/lesson/queues/blogging/internal/services"
@@ -29,13 +30,14 @@ func Run(ctx context.Context, conf Config) error {
 
 		opCtx := context.Background()
 		// This data can come from API request, notification message, etc.
+		id := rand.Intn(10)
 		article := &models.Article{
-			ID:       12,
+			ID:       id,
 			Title:    "Title",
-			AuthorID: 234,
+			AuthorID: id % 5,
 		}
 		like := &models.Like{
-			UserID: 1,
+			UserID: rand.Intn(100),
 			Type:   models.LikeTypeThumbUp,
 		}
 
