@@ -6,6 +6,8 @@ import (
 	"log"
 )
 
+// This is a simples consumer. Check examples of more reliable consumer in lib https://github.com/rabbitmq/amqp091-go/blob/main/example_client_test.go#L53
+
 func main() {
 	// connection - network transport abstraction
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
@@ -23,15 +25,15 @@ func main() {
 
 	// ensure consuming queue exists
 	q, err := ch.QueueDeclare(
-		"analytics.article_likes", // name
-		true,                      // durable
-		false,                     // delete when unused
-		false,                     // exclusive
-		false,                     // no-wait
-		nil,                       // arguments
+		"",    // name
+		false, // durable
+		false, // delete when unused
+		false, // exclusive
+		false, // no-wait
+		nil,   // arguments
 	)
 	if err != nil {
-		log.Fatalf("creating channel: %s", err)
+		log.Fatalf("creating queue: %s", err)
 	}
 
 	err = ch.QueueBind(
@@ -73,7 +75,7 @@ func main() {
 		}
 	}()
 
-	log.Printf(" [*] Waiting for logs. To exit press CTRL+C")
+	log.Printf(" [*] Waiting for message. To exit press CTRL+C")
 	<-forever
 }
 

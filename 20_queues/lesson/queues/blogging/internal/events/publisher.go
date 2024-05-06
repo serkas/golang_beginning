@@ -76,14 +76,14 @@ func (p *Publisher) publishJSON(event any, exchange string) error {
 		return err
 	}
 
-	//// Simplest logic for reconnects - if connection is absent, try to reconnect
-	//if !p.connected.Load() {
-	//	err = p.connect()
-	//	if err != nil {
-	//		return fmt.Errorf("reconnecting to queue: %w", err)
-	//	}
-	//}
-	////
+	// Simplest logic for reconnects - if connection is absent, try to reconnect
+	if !p.connected.Load() {
+		err = p.connect()
+		if err != nil {
+			return fmt.Errorf("reconnecting to queue: %w", err)
+		}
+	}
+	//
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -98,10 +98,10 @@ func (p *Publisher) publishJSON(event any, exchange string) error {
 			Body:        data,
 		})
 	if err != nil {
-		//// Simplest logic for reconnects - mark connection as absent
-		//p.connected.Store(false)
-		//p.Close()
-		////
+		// Simplest logic for reconnects - mark connection as absent
+		p.connected.Store(false)
+		p.Close()
+		//
 		return fmt.Errorf("publishing: %w", err)
 	}
 

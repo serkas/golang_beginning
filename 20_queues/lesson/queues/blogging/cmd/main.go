@@ -14,7 +14,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//// connection - network transport abstraction
+
+	//simple publishing example
+	//connection - network transport abstraction
 	//conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	//if err != nil {
 	//	log.Fatalf("creating connection: %s", err)
@@ -30,13 +32,13 @@ func main() {
 	//
 	//// exchange - entry point and router for messages
 	//err = ch.ExchangeDeclare(
-	//	"publications.like", // name
-	//	"fanout",            // type
-	//	true,                // durable
-	//	false,               // auto-deleted
-	//	false,               // internal
-	//	false,               // no-wait
-	//	nil,                 // arguments
+	//	"blogging.article_likes", // name
+	//	"fanout",                 // type
+	//	true,                     // durable
+	//	false,                    // auto-deleted
+	//	false,                    // internal
+	//	false,                    // no-wait
+	//	nil,                      // arguments
 	//)
 	//if err != nil {
 	//	log.Fatal(err)
@@ -45,14 +47,17 @@ func main() {
 	//ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	//defer cancel()
 	//
-	//body := ""
+	//body := "123"
 	//err = ch.PublishWithContext(ctx,
-	//	"publications.like", // exchange
-	//	"",                  // routing key
-	//	false,               // mandatory
-	//	false,               // immediate
+	//	"blogging.article_likes", // exchange
+	//	"",                       // routing key
+	//	false,                    // mandatory
+	//	false,                    // immediate
 	//	amqp.Publishing{
 	//		ContentType: "text/plain",
 	//		Body:        []byte(body),
 	//	})
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 }
