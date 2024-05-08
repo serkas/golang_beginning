@@ -1,0 +1,1 @@
+ALTER TABLE items DROP column IF EXISTS timestamp;

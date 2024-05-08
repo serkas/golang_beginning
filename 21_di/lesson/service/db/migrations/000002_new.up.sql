@@ -1,0 +1,1 @@
+ALTER TABLE items ADD column timestamp bigint default 0;
