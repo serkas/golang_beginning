@@ -10,6 +10,7 @@ import (
 	"proj/lessons/21_di/lesson/service/internal/api"
 	"proj/lessons/21_di/lesson/service/internal/app"
 	"proj/lessons/21_di/lesson/service/internal/cache"
+	"proj/lessons/21_di/lesson/service/internal/services"
 	"proj/lessons/21_di/lesson/service/internal/services/items"
 	"proj/lessons/21_di/lesson/service/internal/storage"
 	"time"
@@ -33,6 +34,9 @@ func main() {
 		),
 		fx.Provide(func(conf *app.Config, is api.ItemsService) *api.Server {
 			return api.NewServer(conf.ServerAddress, is) // NewServer requires string argument for address. Of course, we can rewrite the server constructor to accept config type, but this can be impossible with external dependency
+		}),
+		fx.Provide(func() services.NowTimeProvider {
+			return func() time.Time { return time.Now() }
 		}),
 		fx.Invoke(runAPIServer),
 	)
