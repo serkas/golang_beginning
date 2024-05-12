@@ -14,8 +14,6 @@ type Request struct {
 	ValueSecondary int64  `param:"v2"`
 
 	Timestamp int64 `param:"t"`
-
-	Checksum string `param:"-"`
 }
 
 func main() {
