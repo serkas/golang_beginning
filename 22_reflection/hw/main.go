@@ -1,16 +1,21 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type Request struct {
 	Alpha          string `param:"a"`
 	GroupIndex     int    `param:"g1"`
 	GroupType      string `param:"g2"`
-	GroupSubtype   string `param:"g3"`
+	GroupSubtype   string `param:"-"`
 	ValuePrimary   int64  `param:"v1"`
 	ValueSecondary int64  `param:"v2"`
 
-	Signature string `param:"s"`
+	Timestamp int64 `param:"t"`
+
+	Checksum string `param:"-"`
 }
 
 func main() {
@@ -21,7 +26,7 @@ func main() {
 		GroupSubtype:   "SubTx2",
 		ValuePrimary:   42,
 		ValueSecondary: 84,
-		Signature:      "af312b8d12",
+		Timestamp:      time.Now().Unix(),
 	}
 
 	fmt.Println(Serialize(r))

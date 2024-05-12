@@ -10,13 +10,12 @@ func TestSerialize(t *testing.T) {
 		GroupSubtype:   "SubTx2",
 		ValuePrimary:   42,
 		ValueSecondary: 84,
-		Signature:      "af312b8d12",
+		Timestamp:      1234567890,
 	}
 
-	expected := `a=aaaa&g1=12&g2=Tx&g3=SubTx2&s=af312b8d12&v1=42&v2=84`
-
+	expResult := `a=aaaa g1=12 g2=Tx t=1234567890 v1=42 v2=84`
 	result := Serialize(r)
-	if result != expected {
-		t.Errorf("expected %q, got: %q", expected, result)
+	if result != expResult {
+		t.Errorf("expected %q, got: %q", expResult, result)
 	}
 }
