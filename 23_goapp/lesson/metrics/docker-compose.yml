@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  grafana:
+    container_name: grafana
+    image: grafana/grafana-enterprise:10.4.3
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    networks:
+      - my-network
+    volumes:
+      - './.docker/grafana/storage:/var/lib/grafana'
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./.docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-admin-api'
+      - '--web.enable-lifecycle'
+    ports:
+      - '9090:9090'
+    networks:
+      - my-network
+
+  db:
+    image: mysql:8.3
+    container_name: items_db_23
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "23306:3306"
+    environment:
+      MYSQL_DATABASE: items_db
+      MYSQL_ROOT_PASSWORD: root
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+
+  cache:
+    image: redis:7.2
+    container_name: cache_23
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "6379:6379"
+
+networks:
+  my-network:
+    driver: bridge
