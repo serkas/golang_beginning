@@ -5,14 +5,16 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/redis/go-redis/v9"
 	"log"
 	"net/http"
+	"time"
+
+	"github.com/redis/go-redis/v9"
+
 	"proj/lessons/23_goapp/lesson/metrics/internal/api"
 	"proj/lessons/23_goapp/lesson/metrics/internal/cache"
 	"proj/lessons/23_goapp/lesson/metrics/internal/services/items"
 	"proj/lessons/23_goapp/lesson/metrics/internal/storage"
-	"time"
 )
 
 type App struct {

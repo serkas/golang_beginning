@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
-	"github.com/joho/godotenv"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
+
 	"proj/lessons/23_goapp/lesson/metrics/internal/app"
 )
 
@@ -20,7 +22,6 @@ func main() {
 	if err := a.Run(context.Background()); err != nil {
 		log.Fatal(err)
 	}
-
 }
 
 func getConfig() app.Config {

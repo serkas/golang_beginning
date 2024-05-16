@@ -4,10 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/joho/godotenv"
 	"log"
 	"math/rand"
 	"os"
+
+	"github.com/joho/godotenv"
+
 	"proj/lessons/23_goapp/lesson/metrics/internal/model"
 	"proj/lessons/23_goapp/lesson/metrics/internal/storage"
 )
@@ -32,7 +34,6 @@ func main() {
 			Name:  fmt.Sprintf("generated item #%d", i),
 			Likes: int(rand.Int63n(1000000)),
 		})
-
 		if err != nil {
 			log.Fatal(err)
 		}

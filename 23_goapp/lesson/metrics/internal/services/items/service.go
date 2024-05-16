@@ -5,9 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"time"
+
 	"proj/lessons/23_goapp/lesson/metrics/internal/cache"
 	"proj/lessons/23_goapp/lesson/metrics/internal/model"
-	"time"
 )
 
 type Store interface {
@@ -62,7 +63,7 @@ func (s *Service) GetTopLiked(ctx context.Context, numTopItems int) (result []*m
 			return nil, fmt.Errorf("getting top liked items: %w", err)
 		}
 
-		err = s.cache.SetItems(ctx, cacheKey, items, time.Minute)
+		err = s.cache.SetItems(ctx, cacheKey, items, 10*time.Second)
 		if err != nil {
 			log.Printf("caching top liked items: %s", err)
 		}

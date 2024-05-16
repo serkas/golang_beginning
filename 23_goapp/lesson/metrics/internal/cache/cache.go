@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/redis/go-redis/v9"
 	"log"
-	"proj/lessons/23_goapp/lesson/metrics/internal/model"
 	"time"
+
+	"github.com/redis/go-redis/v9"
+
+	"proj/lessons/23_goapp/lesson/metrics/internal/model"
 )
 
-var (
-	ErrNotFound = errors.New("not_found")
-)
+var ErrNotFound = errors.New("not_found")
 
 type Cache struct {
 	cli *redis.Client

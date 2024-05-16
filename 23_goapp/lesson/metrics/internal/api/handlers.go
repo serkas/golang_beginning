@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"proj/lessons/23_goapp/lesson/metrics/internal/model"
 	"strconv"
+
+	"proj/lessons/23_goapp/lesson/metrics/internal/model"
 )
 
 func (s *Server) listItems(w http.ResponseWriter, r *http.Request) {

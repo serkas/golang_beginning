@@ -2,8 +2,10 @@ package api
 
 import (
 	"context"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+
 	"proj/lessons/23_goapp/lesson/metrics/internal/model"
 )
 
@@ -28,12 +30,12 @@ func NewServer(addr string, items ItemsService) *Server {
 	}
 
 	handler := http.NewServeMux()
-	handler.HandleFunc("GET /api/v1/items", s.listItems)
-	handler.HandleFunc("POST /api/v1/items", s.addItem)
-	handler.HandleFunc("GET /api/v1/items/{id}", s.getItem)
+	handler.HandleFunc("GET /api/v1/items", metricsMiddleware(s.listItems))
+	handler.HandleFunc("POST /api/v1/items", metricsMiddleware(s.addItem))
+	handler.HandleFunc("GET /api/v1/items/{id}", metricsMiddleware(s.getItem))
 
-	handler.HandleFunc("GET /api/v1/items/ranks/top_liked", s.getTopLikedItems)
-	handler.HandleFunc("GET /api/v1/items/ranks/top_viewed", s.getTopViewedItems)
+	handler.HandleFunc("GET /api/v1/items/ranks/top_liked", metricsMiddleware(s.getTopLikedItems))
+	handler.HandleFunc("GET /api/v1/items/ranks/top_viewed", metricsMiddleware(s.getTopViewedItems))
 
 	// https://prometheus.io/docs/guides/go-application/
 	handler.Handle("/metrics", promhttp.Handler())
