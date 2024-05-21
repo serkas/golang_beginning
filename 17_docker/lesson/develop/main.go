@@ -11,7 +11,7 @@ import (
 // Tutorial: https://tutorialedge.net/golang/golang-mysql-tutorial/
 
 func main() {
-	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/test_db")
+	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:13306)/test_db")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,5 +1,4 @@
 services:
-
   db:
     image: mysql:8.3
     container_name: db
@@ -12,4 +11,3 @@ services:
       MYSQL_ROOT_PASSWORD: root
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
-

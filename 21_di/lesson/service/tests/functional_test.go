@@ -44,10 +44,60 @@ func TestCreate(t *testing.T) {
 	// what do we want - predictable and stable data in the table
 }
 
+func TestCreate2(t *testing.T) {
+	stop := setup(t)
+	defer stop()
+
+	// test-case setup
+	item := &model.Item{
+		Name: "test item",
+	}
+	data, err := json.Marshal(item)
+	require.NoError(t, err)
+
+	req, err := http.NewRequest("POST", "http://localhost:8081/items", bytes.NewReader(data))
+	require.NoError(t, err)
+
+	// execution
+	cli := http.DefaultClient
+	resp, err := cli.Do(req)
+	require.NoError(t, err)
+
+	// check expectations
+	require.Equal(t, http.StatusCreated, resp.StatusCode)
+
+	// more checking of expectations
+}
+
+func TestCreate3(t *testing.T) {
+	stop := setup(t)
+	defer stop()
+
+	// test-case setup
+	item := &model.Item{
+		Name: "test item",
+	}
+	data, err := json.Marshal(item)
+	require.NoError(t, err)
+
+	req, err := http.NewRequest("POST", "http://localhost:8081/items", bytes.NewReader(data))
+	require.NoError(t, err)
+
+	// execution
+	cli := http.DefaultClient
+	resp, err := cli.Do(req)
+	require.NoError(t, err)
+
+	// check expectations
+	require.Equal(t, http.StatusCreated, resp.StatusCode)
+
+	// more checking of expectations
+}
+
 func setup(t *testing.T) (stop func()) {
 	fxApp := fx.New(
 		app.New(),
-		//fx.Replace(newNowFuncForTest()), // caution! replace expects an instance of dependency not a constructor
+		fx.Replace(newNowFuncForTest()), // caution! replace expects an instance of dependency not a constructor
 		fx.Invoke(app.RegisterHTTPServer),
 	)
 

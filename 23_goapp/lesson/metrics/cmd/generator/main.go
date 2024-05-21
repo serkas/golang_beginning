@@ -28,7 +28,7 @@ func main() {
 
 	store := storage.New(sqlDB)
 
-	n := 100000
+	n := 50000
 	for i := 0; i < n; i++ {
 		err := store.AddItem(context.Background(), &model.Item{
 			Name:  fmt.Sprintf("generated item #%d", i),

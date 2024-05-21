@@ -22,26 +22,34 @@ import (
 
 func main() {
 	fxApp := fx.New(
-		fx.Provide(app.ReadConfig),
-		fx.Provide(newDBClient),
-		fx.Provide(storage.New),
+		fx.Provide(
+			app.ReadConfig,
+			newDBClient,
+			storage.New,
+		),
 
 		fx.Provide(
 			newRedisClient,
 			cache.New,
 			items.NewViewsTracker,
-			fx.Annotate(items.New, fx.As(new(api.ItemsService))), // dependency is an interface, hint which implementation to use. Link: https://uber-go.github.io/fx/annotate.html#casting-structs-to-interfaces
+			newService, // dependency is an interface, hint which implementation to use. Link: https://uber-go.github.io/fx/annotate.html#casting-structs-to-interfaces
 		),
 		fx.Provide(func(conf *app.Config, is api.ItemsService) *api.Server {
 			return api.NewServer(conf.ServerAddress, is) // NewServer requires string argument for address. Of course, we can rewrite the server constructor to accept config type, but this can be impossible with external dependency
 		}),
+
 		fx.Provide(func() services.NowTimeProvider {
 			return func() time.Time { return time.Now() }
 		}),
+
 		fx.Invoke(runAPIServer),
 	)
 
 	fxApp.Run()
+}
+
+func newService(s *items.Service) api.ItemsService {
+	return s
 }
 
 func runAPIServer(lifecycle fx.Lifecycle, s *api.Server) {
@@ -64,6 +72,7 @@ func newDBClient(lc fx.Lifecycle, conf *app.Config) (*sql.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("db initialization: %w", err)
 	}
+
 	lc.Append(fx.Hook{
 		OnStop: func(ctx context.Context) error {
 			log.Println("closing DB connection")

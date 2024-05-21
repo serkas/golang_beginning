@@ -12,6 +12,15 @@ import (
 
 var idRemoverRegexp = regexp.MustCompile(`\d+`)
 
+func metricsMiddleware(next func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer durationMetric(prepareEndpointForMetrics(r.URL.Path), r.Method)()
+
+		next(w, r)
+		//statusMetric(prepareEndpointForMetrics(r.URL.Path), )
+	}
+}
+
 var apiDurationMetric = promauto.NewHistogramVec(prometheus.HistogramOpts{
 	Name: "api_response_seconds",
 	Help: "API request handling duration in seconds",
@@ -25,10 +34,14 @@ func durationMetric(endpoint, method string) func() {
 	}
 }
 
-func metricsMiddleware(next func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		defer durationMetric(prepareEndpointForMetrics(r.URL.Path), r.Method)()
-		next(w, r)
+var apiStatusMetric = promauto.NewCounterVec(prometheus.CounterOpts{
+	Name: "api_response_status",
+	Help: "API response statuses",
+}, []string{"endpoint", "method"})
+
+func statusMetric(endpoint, method string) func() {
+	return func() {
+		apiStatusMetric.WithLabelValues(endpoint, method).Inc()
 	}
 }
 

@@ -28,6 +28,7 @@ func setup(t *testing.T) (cleanUp func(...string), db *sql.DB) {
 		t.Logf("app setup: %s", err)
 	}
 
+	// start server
 	ctx, cancelSrv := context.WithCancel(context.Background())
 	go func() {
 		err := a.Run(ctx)

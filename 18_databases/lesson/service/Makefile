@@ -1,4 +1,4 @@
-DB_DSN ?= mysql://root:root@tcp(localhost:13306)/items_db
+DB_DSN ?= mysql://root:root@tcp(localhost:23306)/items_db
 
 migration_create:
 	migrate create -ext sql -dir db/migrations/ -seq new

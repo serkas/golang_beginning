@@ -1,1 +1,1 @@
-ALTER TABLE items DROP column;
+ALTER TABLE items DROP column created_at;

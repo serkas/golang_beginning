@@ -43,6 +43,7 @@ func (s *Service) AddMeasurement(ctx context.Context, measurement *entities.Meas
 	if err != nil {
 		return fmt.Errorf("finding sensor: %w", err)
 	}
+	// other business logic...
 
 	err = s.store.CreateSensorMeasurement(ctx, measurement)
 	if err != nil {

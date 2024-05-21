@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	//"github.com/serhiikas9/strtools"
+	"github.com/serhiikas9/strtools"
 )
 
 func main() {
@@ -10,5 +10,6 @@ func main() {
 	str := "qwerty"
 
 	fmt.Println(str)
-	//fmt.Println(strtools.Reverse(str))
+	fmt.Println(strtools.Reverse(str))
+	fmt.Println(strtools.Truncate(str, 2))
 }
